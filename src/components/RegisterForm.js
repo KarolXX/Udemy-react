@@ -15,7 +15,17 @@ const RegisterForm = ({ setUser }) => {
                 name: formRef.current.elements.name.value
             })
         })
-            .then(resp => resp.json())
+            .then(resp => {
+                if (resp.status !== 201) {
+                    resp.text().then(function (text) {
+                        alert(text)
+                        formRef.current.reset()
+                    });
+                    throw 'User with given nick already exists';
+                }
+                else
+                    return resp.json()
+            })
             .then(newUser => setUser(newUser))
     }
 
