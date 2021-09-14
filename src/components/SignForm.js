@@ -1,5 +1,4 @@
 import { React, useRef, useState } from 'react'
-import '../styles/_Form.scss';
 
 const SignForm = ({ setUser }) => {
     const formRef = useRef();
