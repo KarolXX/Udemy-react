@@ -278,11 +278,14 @@ const Course = ({ id, setID, user, courseCategory, setCourseCategory, setShowLik
                         }
                         <div className="comments">
                             <h1 className="comments__title">Comments</h1>
-                            {courseModel.course.comments.map(com => <Comment comment={com} />)}
+                            {courseModel.course.comments.map(com => <Comment comment={com} courseId={id} />)}
                             <form className="comments__form" ref={commentForm} onSubmit={e => addComment(e)} >
                                 <input type="text" name="comTxt" className="comments__form--input" placeholder="Write comment..." />
-                                {/* <button className="comments__form--btn">Add!</button> */}
+                                <button className="comments__form--btn">Add!</button>
                             </form>
+                            {/* <form onSubmit={handleSubmission}>
+                                <button>Submit</button>
+                            </form> */}
                         </div>
                     </>
                     :

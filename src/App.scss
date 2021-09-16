@@ -234,6 +234,10 @@ $primary-font: Arial, Helvetica, sans-serif;
 }
 
 .comment {
+  &__image {
+    max-width: 200px;
+    max-height: 130px;
+  }
 }
 
 .btn {
