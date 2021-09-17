@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router';
+import { useForm } from 'react-hook-form';
 
 import { FaStar, FaRegStar } from 'react-icons/fa';
 
@@ -17,6 +18,7 @@ const Course = ({ id, setID, user, courseCategory, setCourseCategory, setShowLik
     const [userRate, setUserRate] = useState(null)
     // state that is displayed as a hint for user to let him know what rate he can accept by click on star
     const [userVote, setUserVote] = useState(null)
+    const [selectedFile, setSelectedFile] = useState()
 
     const commentForm = useRef()
     let history = useHistory()
@@ -44,7 +46,9 @@ const Course = ({ id, setID, user, courseCategory, setCourseCategory, setShowLik
     //     setUserRate(null)
     //     setUserVote(null)
     // }, [id]) //when id changes (another course is displayed) then 'clean' state
-    //that's a bad mindset because when id changes it means that component received new id prop ... and every another prop as well
+    //that's a bad mindset because when id changes it means that 
+    //component received new id prop ... and every another prop as well - OK but then state is still the same 
+    //so it's not a bad mindset!!! (anyway it's done in first useEffect)
 
     useEffect(() => {
         console.log('course effect')
@@ -184,16 +188,59 @@ const Course = ({ id, setID, user, courseCategory, setCourseCategory, setShowLik
                     });
                     throw 'Buy course first!';
                 }
-                else
+                else {
+                    console.log(resp)
                     return resp.json()
+                }
             })
-            .then(data => {
-                //console.log("no")
+            .then(newCom => {
                 let copyCourse = { ...courseModel }
-                copyCourse.course.comments.push(data)
+                copyCourse.course.comments.push(newCom)
                 setCourseModel(copyCourse)
+
+                // upload comment image 
+                const formData = new FormData()
+                formData.append('File', selectedFile)
+
+                fetch(`http://localhost:8080/courses/${id}/comments/${newCom.commentId}/img`, {
+                    method: 'post',
+                    body: formData
+                })
+                    .then(resp => {
+                        console.log('first then')
+                        resp.json()
+                    })
+                    .then(comImg => {
+                        console.log('second then')
+                        //newCom.image = `http://${process.env.REACT_APP_URL}:8080/courses/${id}/comments/${newCom.commentId}/img`
+                        console.log(comImg)
+                        copyCourse.course.comments.push(newCom)
+                        setCourseModel(copyCourse)
+                    })
+                    .catch(err => console.log(err))
+
+
             })
             .catch(err => setErr(err))
+
+
+    }
+
+    // const uploadFile = () => {
+    //     const formData = new FormData()
+    //     formData.append('File', selectedFile)
+
+    //     fetch(`localhost:8080/courses/${id}/comments/${}/img`, {
+    //         method: 'post',
+    //         body: formData
+    //     })
+    //         .then(resp => resp.json())
+    //         .then(data => console.log(data))
+    //         .catch(err => console.log(err))
+    // }
+
+    const changeHandler = (e) => {
+        setSelectedFile(e.target.files[0])
     }
 
     return (
@@ -281,6 +328,7 @@ const Course = ({ id, setID, user, courseCategory, setCourseCategory, setShowLik
                             {courseModel.course.comments.map(com => <Comment comment={com} courseId={id} />)}
                             <form className="comments__form" ref={commentForm} onSubmit={e => addComment(e)} >
                                 <input type="text" name="comTxt" className="comments__form--input" placeholder="Write comment..." />
+                                <input type="file" name="img" onChange={changeHandler} />
                                 <button className="comments__form--btn">Add!</button>
                             </form>
                             {/* <form onSubmit={handleSubmission}>
