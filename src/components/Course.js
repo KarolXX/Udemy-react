@@ -23,7 +23,7 @@ const Course = ({ id, setID, user, courseCategory, setCourseCategory, setShowLik
     const commentForm = useRef()
     let history = useHistory()
 
-    console.log('course re-render')
+    //console.log('course re-render')
 
     useEffect(() => {
         return () => {
@@ -195,7 +195,8 @@ const Course = ({ id, setID, user, courseCategory, setCourseCategory, setShowLik
             })
             .then(newCom => {
                 let copyCourse = { ...courseModel }
-                copyCourse.course.comments.push(newCom)
+                const index = copyCourse.course.comments.length;
+                copyCourse.course.comments[index] = newCom;
                 setCourseModel(copyCourse)
 
                 // upload comment image 
@@ -206,20 +207,20 @@ const Course = ({ id, setID, user, courseCategory, setCourseCategory, setShowLik
                     method: 'post',
                     body: formData
                 })
-                    .then(resp => {
+                    .then(() => {
                         console.log('first then')
-                        resp.json()
-                    })
-                    .then(comImg => {
-                        console.log('second then')
-                        //newCom.image = `http://${process.env.REACT_APP_URL}:8080/courses/${id}/comments/${newCom.commentId}/img`
-                        console.log(comImg)
-                        copyCourse.course.comments.push(newCom)
-                        setCourseModel(copyCourse)
+                        copyCourse.course.comments[index] = {
+                            ...newCom,
+                            image: {
+                                image: `http://${process.env.REACT_APP_URL}:8080/courses/${id}/comments/${newCom.commentId}/img`
+                            }
+                        };
+                        // REACT may not notice that something had changed the second time we called the setCourseModel in this method.
+                        // When we use the "..." operator we pass a new object (copy) 
+                        // so REACT will see that a change has occurred
+                        setCourseModel({ ...copyCourse });
                     })
                     .catch(err => console.log(err))
-
-
             })
             .catch(err => setErr(err))
 
@@ -250,6 +251,7 @@ const Course = ({ id, setID, user, courseCategory, setCourseCategory, setShowLik
                 courseModel ?
                     <>
                         <img className="course__image" alt="noo" src={courseModel.course.image ? `http://${process.env.REACT_APP_URL}:8080/courses/${id}/img` : "/assets/react_js.jpg"} />
+                        {/* <video controls autoPlay src={`http://${process.env.REACT_APP_URL}:8080/courses/${id}/img`} /> */}
                         <h1 className="course__title">
                             {courseModel.course.title}
                         </h1>
