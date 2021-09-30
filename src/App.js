@@ -7,6 +7,7 @@ import './App.scss';
 import StartPage from './components/StartPage';
 import MainPage from './components/MainPage';
 import Course from './components/Course';
+import Author from './components/Author';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -42,6 +43,7 @@ function App() {
             color="white"
           //onClick={() => getUserLikedCourses()}
           />
+          {/* FIXME */}
           {
             showLikedCourses
             &&
@@ -57,6 +59,7 @@ function App() {
         </p>
       </div>}
       <Switch>
+        <Route path="/authors" render={() => <Author />} />
         <Route exact path="/" render={() => <StartPage user={user} setUser={setUser} />} />
         <Route exact path="/courses" render={() => <MainPage
           user={user} setUser={setUser}
