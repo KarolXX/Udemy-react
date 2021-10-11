@@ -1,7 +1,7 @@
 import { FaUserAlt } from 'react-icons/fa'
 
 const Comment = ({ comment, courseId }) => {
-    console.log('comment render')
+    //console.log('comment render')
     return (
         <div className="comment">
             <hr></hr>

@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router';
-import { useForm } from 'react-hook-form';
 
 import { FaStar, FaRegStar } from 'react-icons/fa';
 
@@ -227,11 +226,37 @@ const Course = ({ id, setID, user, courseCategory, setCourseCategory, setShowLik
 
     }
 
+    const purchaseCourse = () => {
+        fetch(`http://localhost:8080/courses/course-purchase`, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: user.userId,
+                courseId: id
+            })
+        })
+            .then(resp => {
+                if (resp.status !== 201) {
+                    resp.text().then(function (text) {
+                        alert(text)
+                        commentForm.current.reset()
+                    });
+                }
+                else {
+                    setIsBought(true)
+                }
+            })
+
+    }
+
     // const uploadFile = () => {
     //     const formData = new FormData()
     //     formData.append('File', selectedFile)
 
-    //     fetch(`localhost:8080/courses/${id}/comments/${}/img`, {
+    //     fetch(`http://localhost:8080/courses/${id}/comments/${}/img`, {
     //         method: 'post',
     //         body: formData
     //     })
@@ -250,7 +275,7 @@ const Course = ({ id, setID, user, courseCategory, setCourseCategory, setShowLik
             {
                 courseModel ?
                     <>
-                        <img className="course__image" alt="noo" src={courseModel.course.image ? `http://${process.env.REACT_APP_URL}:8080/courses/${id}/img` : "/assets/react_js.jpg"} />
+                        <img className="course__image" alt="noo" src={courseModel.course.file ? `http://${process.env.REACT_APP_URL}:8080/courses/${id}/img` : "/assets/react_js.jpg"} />
                         {/* <video controls autoPlay src={`http://${process.env.REACT_APP_URL}:8080/courses/${id}/img`} /> */}
                         <h1 className="course__title">
                             {courseModel.course.title}
@@ -287,7 +312,7 @@ const Course = ({ id, setID, user, courseCategory, setCourseCategory, setShowLik
                                             :
                                             courseModel.course.price + "$"}
                                     </p>
-                                    <button className="course__btn">Purchase</button>
+                                    <button className="course__btn" onClick={purchaseCourse}>Purchase</button>
                                 </>
                         }
                         <p style={{ "margin": "5px 32%" }}>
