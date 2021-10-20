@@ -241,11 +241,34 @@ const Course = ({
       .catch((err) => setErr(err));
   };
 
+  const purchaseCourse = () => {
+    fetch(`http://localhost:8080/courses/course-purchase`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        userId: user.userId,
+        courseId: id,
+      }),
+    }).then((resp) => {
+      if (resp.status !== 201) {
+        resp.text().then(function (text) {
+          alert(text);
+          commentForm.current.reset();
+        });
+      } else {
+        setIsBought(true);
+      }
+    });
+  };
+
   // const uploadFile = () => {
   //     const formData = new FormData()
   //     formData.append('File', selectedFile)
 
-  //     fetch(`localhost:8080/courses/${id}/comments/${}/img`, {
+  //     fetch(`http://localhost:8080/courses/${id}/comments/${}/img`, {
   //         method: 'post',
   //         body: formData
   //     })
@@ -267,7 +290,7 @@ const Course = ({
             className="course__image"
             alt="noo"
             src={
-              courseModel.course.image.filePath
+              courseModel.course.image
                 ? `http://${process.env.REACT_APP_URL}:8080/courses/${id}/img`
                 : "/assets/react_js.jpg"
             }
@@ -319,7 +342,9 @@ const Course = ({
                   courseModel.course.price + "$"
                 )}
               </p>
-              <button className="course__btn">Purchase</button>
+              <button className="course__btn" onClick={purchaseCourse}>
+                Purchase
+              </button>
             </>
           )}
           <p style={{ margin: "5px 32%" }}>30-day money-back guarantee</p>
