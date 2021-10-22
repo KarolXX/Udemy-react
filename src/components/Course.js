@@ -286,125 +286,135 @@ const Course = ({
       {courseCategory && history.push(`/courses?category=${courseCategory}`)}
       {courseModel ? (
         <>
-          <img
-            className="course__image"
-            alt="noo"
-            src={
-              courseModel.course.image
-                ? `http://${process.env.REACT_APP_URL}:8080/courses/${id}/img`
-                : "/assets/react_js.jpg"
-            }
-          />
-          {/* <video controls autoPlay src={`http://${process.env.REACT_APP_URL}:8080/courses/${id}/img`} /> */}
-          <h1 className="course__title">{courseModel.course.title}</h1>
-          <p style={{ fontSize: "23px", color: "#34c8e2", marginTop: "0" }}>
-            Related Categories:
-            {courseModel.course.categories.map((cat) => {
-              return (
-                <>
-                  <i
-                    style={{ margin: "0 18px" }}
-                    onClick={() => getCategory(cat.id)}
-                  >
-                    {cat.name}
-                  </i>
-                </>
-              );
-            })}
-          </p>
-          <h2>
-            {getStars(courseModel.course.averageRating, false)}(
-            {courseModel.course.averageRating} / 5)
-          </h2>
           {isBought ? (
-            <h3 className="course__vote">
-              Your vote: {getStars(userRate, true)}
-              {userVote && userVote + ".0"}
-            </h3>
+            <video
+              controls
+              autoPlay
+              src={`http://${process.env.REACT_APP_URL}:8080/courses/${id}/video`}
+            />
           ) : (
-            <>
-              {handleUserRate()}
-              <p className="course__price">
-                {courseModel.course.promotion ? (
-                  <>
-                    {courseModel.course.promotion} $
-                    <strike
-                      style={{
-                        marginLeft: "20px",
-                        fontSize: "30px",
-                        color: "gray",
-                      }}
-                    >
-                      {courseModel.course.price} $
-                    </strike>
-                  </>
-                ) : (
-                  courseModel.course.price + "$"
-                )}
-              </p>
-              <button className="course__btn" onClick={purchaseCourse}>
-                Purchase
-              </button>
-            </>
+            <img
+              className="course__image"
+              alt="noo"
+              src={
+                courseModel.course.image
+                  ? `http://${process.env.REACT_APP_URL}:8080/courses/${id}/img`
+                  : "/assets/react_js.jpg"
+              }
+            />
           )}
-          <p style={{ margin: "5px 32%" }}>30-day money-back guarantee</p>
-          {isLiked === null && handleBeingLiked()}
-          <button
-            className="course__btn--smaller"
-            onClick={() => (isLiked ? dislikeCourse() : likeCourse())}
-          >
-            {isLiked ? "Remove from Favourites" : "Add to Favourites"}
-          </button>
-          <hr width="100%" color="white"></hr>
-          <h1>{courseModel.course.description} . . .</h1>
-          {otherCourses ? (
-            <>
-              <button
-                className="course__btn--smaller"
-                onClick={() => setOtherCourses(null)}
-              >
-                HIDE other courses of this course participants
-              </button>
-              {otherCourses.map((anotherCourse) => (
-                <CourseInMenu
-                  course={anotherCourse}
-                  setCourseRedirectID={setID}
-                  setShowLikedCourses={setShowLikedCourses}
-                  setCourseCategory={setCourseCategory}
-                />
-              ))}
-            </>
-          ) : (
+          <>
+            {/* <video controls autoPlay src={`http://${process.env.REACT_APP_URL}:8080/courses/${id}/img`} /> */}
+            <h1 className="course__title">{courseModel.course.title}</h1>
+            <p style={{ fontSize: "23px", color: "#34c8e2", marginTop: "0" }}>
+              Related Categories:
+              {courseModel.course.categories.map((cat) => {
+                return (
+                  <>
+                    <i
+                      style={{ margin: "0 18px" }}
+                      onClick={() => getCategory(cat.id)}
+                    >
+                      {cat.name}
+                    </i>
+                  </>
+                );
+              })}
+            </p>
+            <h2>
+              {getStars(courseModel.course.averageRating, false)}(
+              {courseModel.course.averageRating} / 5)
+            </h2>
+            {isBought ? (
+              <h3 className="course__vote">
+                Your vote: {getStars(userRate, true)}
+                {userVote && userVote + ".0"}
+              </h3>
+            ) : (
+              <>
+                {handleUserRate()}
+                <p className="course__price">
+                  {courseModel.course.promotion ? (
+                    <>
+                      {courseModel.course.promotion} $
+                      <strike
+                        style={{
+                          marginLeft: "20px",
+                          fontSize: "30px",
+                          color: "gray",
+                        }}
+                      >
+                        {courseModel.course.price} $
+                      </strike>
+                    </>
+                  ) : (
+                    courseModel.course.price + "$"
+                  )}
+                </p>
+                <button className="course__btn" onClick={purchaseCourse}>
+                  Purchase
+                </button>
+              </>
+            )}
+            <p style={{ margin: "5px 32%" }}>30-day money-back guarantee</p>
+            {isLiked === null && handleBeingLiked()}
             <button
               className="course__btn--smaller"
-              onClick={() => getOtherCourses()}
+              onClick={() => (isLiked ? dislikeCourse() : likeCourse())}
             >
-              Show other courses of this course participants
+              {isLiked ? "Remove from Favourites" : "Add to Favourites"}
             </button>
-          )}
-          <div className="comments">
-            <h1 className="comments__title">Comments</h1>
-            {courseModel.course.comments.map((com) => (
-              <Comment comment={com} courseId={id} />
-            ))}
-            <form
-              className="comments__form"
-              ref={commentForm}
-              onSubmit={(e) => addComment(e)}
-            >
-              <input
-                type="text"
-                name="comTxt"
-                className="comments__form--input"
-                placeholder="Write comment..."
-              />
-              <input type="file" name="img" onChange={changeHandler} />
-              <button className="comments__form--btn">Add!</button>
-            </form>
-            {/* <form onSubmit={handleSubmission}>
+            <hr width="100%" color="white"></hr>
+            <h1>{courseModel.course.description} . . .</h1>
+            {otherCourses ? (
+              <>
+                <button
+                  className="course__btn--smaller"
+                  onClick={() => setOtherCourses(null)}
+                >
+                  HIDE other courses of this course participants
+                </button>
+                {otherCourses.map((anotherCourse) => (
+                  <CourseInMenu
+                    course={anotherCourse}
+                    setCourseRedirectID={setID}
+                    setShowLikedCourses={setShowLikedCourses}
+                    setCourseCategory={setCourseCategory}
+                  />
+                ))}
+              </>
+            ) : (
+              <button
+                className="course__btn--smaller"
+                onClick={() => getOtherCourses()}
+              >
+                Show other courses of this course participants
+              </button>
+            )}
+            <div className="comments">
+              <h1 className="comments__title">Comments</h1>
+              {courseModel.course.comments.map((com) => (
+                <Comment comment={com} courseId={id} />
+              ))}
+              <form
+                className="comments__form"
+                ref={commentForm}
+                onSubmit={(e) => addComment(e)}
+              >
+                <input
+                  type="text"
+                  name="comTxt"
+                  className="comments__form--input"
+                  placeholder="Write comment..."
+                />
+                <input type="file" name="img" onChange={changeHandler} />
+                <button className="comments__form--btn">Add!</button>
+              </form>
+              {/* <form onSubmit={handleSubmission}>
                                 <button>Submit</button>
                             </form> */}
-          </div>
+            </div>
+          </>
         </>
       ) : null}
     </div>
