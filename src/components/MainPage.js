@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 
 import CourseInMenu from "./CourseInMenu";
@@ -10,6 +10,8 @@ const MainPage = ({
     courseRedirectID, setCourseRedirectID,
     courseCategory, setCourseCategory
 }) => {
+    const [page, setPage] = useState(1)
+
     let history = useHistory()
 
     const params = new URLSearchParams(window.location.search)
@@ -21,15 +23,15 @@ const MainPage = ({
     }, [])
 
     useEffect(() => {
-        const url = courseCategory ? `http://localhost:8080/courses?category=${courseCategory}` : `http://localhost:8080/courses`
+        const url = courseCategory ? `http://localhost:8080/courses?category=${courseCategory}` : `http://localhost:8080/courses?page=${page}&size=7`
         fetch(url)
             .then(resp => resp.json())
-            .then(data => setCourses(data))
+            .then(data => setCourses(data.content))
             .catch(err => {
                 console.log(err);
                 alert('Server Error')
             })
-    }, [courseCategory])
+    }, [courseCategory, page])
 
     console.log('RENDER mainpage')
 
@@ -48,6 +50,7 @@ const MainPage = ({
                         :
                         null
                 }
+                <button onClick={() => setPage((prevState) => prevState + 1)}>===q</button>
             </div>
         </div>
     )
