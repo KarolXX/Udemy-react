@@ -60,7 +60,7 @@ const Course = ({
             .then((resp) => resp.json())
             .then((data) => setCourseModel(data))
             .catch((err) => setErr(true));
-    }, [userRate, id, user, isLiked]); // fetch courseModel again after changing user rate to update average rate
+    }, [userRate, user, id, isLiked]); // fetch courseModel again after changing user rate to update average rate
 
     const getCategory = (categoryID) => {
         console.log("ss");
@@ -146,7 +146,7 @@ const Course = ({
 
     const getOtherCourses = () => {
         fetch(
-            `http://localhost:8080/courses/${id}/participants/other-courses?user=${user.userId}`
+            `http://localhost:8080/courses/${id}/participants/other-courses`
         )
             .then((resp) => resp.json())
             .then((data) => setOtherCourses(data))
