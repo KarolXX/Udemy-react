@@ -6,20 +6,19 @@ const SignForm = ({ setUser }) => {
 
     const logIn = (e) => {
         e.preventDefault();
-        const [id, setId] = formRef.current.elements.id.value
-        fetch(`http://localhost:8080/users/${id}`, {
+        fetch(`http://localhost:8080/oauth/login`, {
             method: 'post',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                id: formRef.current.elements.id.value,
-                name: formRef.current.elements.name.value
+                name: formRef.current.elements.name.value,
+                password: formRef.current.elements.password.value
             })
         })
             .then(resp => resp.json())
-            .then(data => setUser(data))
+            .then(data => setUser(data.user))
             .catch(err => {
                 setIsErr(true)
                 console.log(err)
@@ -31,14 +30,14 @@ const SignForm = ({ setUser }) => {
             <form ref={formRef}>
                 Log in to <b>Udemy</b>
                 <p className="form__p">
-                    <label>Your ID number: </label>
-                    <br></br>
-                    <input name="id" type="number" className="form__input"></input>
-                </p>
-                <p className="form__p">
                     <label>Your name:  </label>
                     <br></br>
                     <input name="name" type="text" className="form__input"></input>
+                </p>
+                <p className="form__p">
+                    <label>Your password: </label>
+                    <br></br>
+                    <input name="password" type="password" className="form__input"></input>
                 </p>
                 <button
                     type="submit"

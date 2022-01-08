@@ -5,14 +5,15 @@ const RegisterForm = ({ setUser }) => {
 
     const register = (e) => {
         e.preventDefault();
-        fetch('http://localhost:8080/users', {
+        fetch('http://localhost:8080/oauth', {
             method: 'post',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                name: formRef.current.elements.name.value
+                name: formRef.current.elements.name.value,
+                password: formRef.current.elements.password.value
             })
         })
             .then(resp => {
@@ -37,6 +38,7 @@ const RegisterForm = ({ setUser }) => {
                     <label>Your name:  </label>
                     <br></br>
                     <input name="name" type="text" className="form__input"></input>
+                    <input name="password" type="password" className="form__input"></input>
                 </p>
                 <button
                     type="submit"
