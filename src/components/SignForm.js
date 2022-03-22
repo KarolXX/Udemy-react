@@ -18,7 +18,7 @@ const SignForm = ({ setUser }) => {
             })
         })
             .then(resp => resp.json())
-            .then(data => setUser(data.user))
+            .then(data => setUser(data.person))
             .catch(err => {
                 setIsErr(true)
                 console.log(err)
