@@ -58,7 +58,10 @@ const Course = ({
         console.log("course effect");
         fetch(`http://localhost:8080/courses/${id}?user=${user.userId}`)
             .then((resp) => resp.json())
-            .then((data) => setCourseModel(data))
+            .then((data) => {
+                setCourseModel(data)
+                setUserRate(data.userRate)
+            })
             .catch((err) => setErr(true));
     }, [userRate, user, id, isLiked]); // fetch courseModel again after changing user rate to update average rate
 
