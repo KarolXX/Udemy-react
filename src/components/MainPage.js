@@ -50,7 +50,7 @@ const MainPage = ({
                         :
                         null
                 }
-                <button onClick={() => setPage((prevState) => prevState + 1)}>===q</button>
+                <button onClick={() => setPage((prevState) => prevState + 1)}><b>Next page</b></button>
             </div>
         </div>
     )

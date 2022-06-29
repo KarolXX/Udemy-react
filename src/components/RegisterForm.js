@@ -5,7 +5,7 @@ const RegisterForm = ({ setUser }) => {
 
     const register = (e) => {
         e.preventDefault();
-        fetch('http://localhost:8080/oauth', {
+        fetch('http://localhost:8080/oauth/users', {
             method: 'post',
             headers: {
                 'Accept': 'application/json',
@@ -17,7 +17,7 @@ const RegisterForm = ({ setUser }) => {
             })
         })
             .then(resp => {
-                if (resp.status !== 201) {
+                if (resp.status === 201) {
                     resp.text().then(function (text) {
                         alert(text)
                         formRef.current.reset()
@@ -27,7 +27,7 @@ const RegisterForm = ({ setUser }) => {
                 else
                     return resp.json()
             })
-            .then(newUser => setUser(newUser))
+            .then(data => setUser(data.person))
     }
 
     return (
@@ -38,6 +38,9 @@ const RegisterForm = ({ setUser }) => {
                     <label>Your name:  </label>
                     <br></br>
                     <input name="name" type="text" className="form__input"></input>
+                    <br></br>
+                    <label>password:  </label>
+                    <br></br>
                     <input name="password" type="password" className="form__input"></input>
                 </p>
                 <button
