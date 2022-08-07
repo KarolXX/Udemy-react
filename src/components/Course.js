@@ -149,7 +149,7 @@ const Course = ({
 
     const getOtherCourses = () => {
         fetch(
-            `http://localhost:8080/courses/${id}/participants/other-courses`
+            `http://localhost:8080/courses/${id}/participants/other-courses/${user.userId}`
         )
             .then((resp) => resp.json())
             .then((data) => setOtherCourses(data))
