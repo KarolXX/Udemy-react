@@ -15,7 +15,7 @@ const Comment = ({ comment, courseId }) => {
           className="comment__image"
           src={
             comment.image.filePath
-              ? `http://${process.env.REACT_APP_URL}:8080/courses/${courseId}/comments/${comment.commentId}/img`
+              ? `http://localhost:8080/courses/${courseId}/comments/${comment.commentId}/img`
               : null
           }
           alt="noooo"

@@ -91,7 +91,7 @@ const CourseInMenu = ({
           alt="noo"
           src={
             course.image
-              ? `http://${process.env.REACT_APP_URL}:8080/courses/${course.id}/img`
+              ? `http://localhost:8080/courses/${course.id}/img`
               : "/assets/react_js.jpg"
           }
           width="290px"
