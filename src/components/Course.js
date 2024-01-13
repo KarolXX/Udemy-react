@@ -166,18 +166,22 @@ const Course = ({
       { method: "post" }
     )
       .then((resp) => {
-        if (resp.status === 204) setIsLiked(true);
+        if (resp.status === 201) setIsLiked(true);
       })
       .catch((err) => setErr(true));
   };
 
   const dislikeCourse = () => {
     fetch(
-      `http://localhost:8080/users/${user.userId}/courses/${id}/course-liking`,
+      `http://localhost:8080/users/${user.userId}/courses/${id}/course-disliking`,
       { method: "delete" }
     )
       .then((resp) => {
-        if (resp.status === 204) setIsLiked(false);
+        console.log("BEFORE: " + isLiked);
+        if (resp.status === 204) {
+          setIsLiked(false);
+        }
+        console.log("AFTER: " + isLiked);
       })
       .catch((err) => setErr(true));
   };
